@@ -1,0 +1,12 @@
+FROM frolvlad/alpine-glibc:alpine-3.10
+
+RUN apk add --no-cache ca-certificates libstdc++
+
+WORKDIR /work/
+COPY target/*-runner /work/application
+RUN chmod 775 /work /work/application
+EXPOSE 8080
+ENV JAVA_XMX=32m
+CMD ["sh", "-c", "./application \
+                    -Xmx${JAVA_XMX} \
+                    -Dquarkus.http.host=0.0.0.0"]
